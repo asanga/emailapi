@@ -1,0 +1,224 @@
+openapi: 3.0.3
+info:
+  version: "1.0.0"
+  title: "Email API Service"
+  description: "Email API Service"
+tags:
+  - name: "email"
+    description: "Enable Rest api for access email server"
+  - name: "cors"
+    description: "Cross Origin Resource Sharing"
+
+paths:
+  /v1/emails:
+    get:
+      tags:
+        - email
+      description: "Get list of emails"
+      operationId: getEmailList
+      parameters:
+        - $ref: '#/components/parameters/UsernameParam'
+        - $ref: '#/components/parameters/PageNumberParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: "OK"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                description: "cors enable header for browser"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailListDto'
+    post:
+      tags:
+        - email
+      description: "Create an email in the server"
+      operationId: createEmail
+      parameters:
+        - $ref: '#/components/parameters/UsernameParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailDto'
+      responses:
+        '201':
+          description: "CREATED"
+          headers:
+            location-url:
+              schema:
+                type: string
+                description: "url for created resource"
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                description: "cors enable header for browser"
+    options:
+      tags:
+        - cors
+      operationId: getEmailListOptions
+      responses:
+        '200':
+          description: "OK"
+          headers:
+            Access-Control-Allow-Origin:
+              description: '*'
+              style: simple
+              schema:
+                type: string
+
+  /v1/emails/{id}:
+    get:
+      tags:
+        - email
+      description: "Returns a email by id"
+      operationId: getEmailById
+      parameters:
+        - $ref: '#/components/parameters/UsernameParam'
+        - $ref: '#/components/parameters/EmailIdParam'
+      responses:
+        '200':
+          description: "OK"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                description: "cors enable header for browser"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailDto'
+
+    put:
+      tags:
+        - email
+      description: "Send an email"
+      operationId: updateEmail
+      parameters:
+        - $ref: '#/components/parameters/UsernameParam'
+        - $ref: '#/components/parameters/EmailIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailDto'
+      responses:
+        '200':
+          description: "OK"
+        '201':
+          description: "CREATED"
+        '204':
+          description: "NO CONTENT"
+          headers:
+            location-url:
+              schema:
+                type: string
+                description: "url for created resource"
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                description: "cors enable header for browser"
+
+    patch:
+      tags:
+        - email
+      description: "Update email partially"
+      operationId: patchEmail
+      parameters:
+        - $ref: '#/components/parameters/UsernameParam'
+        - $ref: '#/components/parameters/EmailIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: "OK"
+        '204':
+          description: "NO CONTENT"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                description: "cors enable header for browser"
+
+    options:
+      tags:
+        - cors
+      operationId: getEmailByIdOptions
+      parameters:
+        - $ref: '#/components/parameters/EmailIdParam'
+      responses:
+        '200':
+          description: "cors enable header for browser"
+          headers:
+            Access-Control-Allow-Origin:
+              description: '*'
+              style: simple
+              schema:
+                type: string
+
+components:
+  parameters:
+    UsernameParam:
+      name: username
+      required: true
+      description: Specific username of the request
+      in: header
+      schema:
+        type: string
+    EmailIdParam:
+      name: id
+      required: true
+      in: path
+      schema:
+        type: integer
+        format: int64
+    PageNumberParam:
+      name: pageNumber
+      required: false
+      description: Specify page number
+      in: query
+      schema:
+        type: integer
+    PageSizeParam:
+      name: pageSize
+      required: false
+      description: Specify page size
+      in: query
+      schema:
+        type: integer
+  schemas:
+    EmailListDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/EmailDto'
+    EmailDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        receiver:
+          $ref: '#/components/schemas/EmailAddressDto'
+        ccList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailAddressDto'
+        bccList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailAddressDto'
+        subject:
+          type: string
+          description: Subject of the email
+        body:
+          type: string
+          description: Body of the email
+    EmailAddressDto:
+      type: string
+      description: email
