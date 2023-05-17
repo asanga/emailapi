@@ -1,6 +1,9 @@
 package com.aviation.emailapi.controller;
 
+import com.aviation.emailapi.model.Email;
 import com.aviation.emailapi.model.EmailDto;
+import com.aviation.emailapi.repo.MemoryEmailDB;
+import com.aviation.emailapi.service.EmailService;
 import com.aviation.emailapi.util.ValidatorUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,11 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.ParseException;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EmailApiController.class)
-@ComponentScan({"com.aviation.emailapi.util", "com.aviation.emailapi.configuration"})
+@ComponentScan({"com.aviation.emailapi.util", "com.aviation.emailapi.configuration", "com.aviation.emailapi.service"})
 class EmailApiControllerIT {
 
     @Autowired
@@ -36,6 +41,15 @@ class EmailApiControllerIT {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private MemoryEmailDB memoryEmailDB;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
     @DisplayName("Given empty body, when create email, then return validation exception")
     public void givenInvalidInput_whenCallCreateEmail_thenReturnCreatedResponse() throws Exception {
@@ -49,13 +63,35 @@ class EmailApiControllerIT {
                 .andExpect(status().isBadRequest());
     }
 
-    private static String getInValidEmailDtoJsonString() throws ParseException, JsonProcessingException {
+    @Test
+    public void givenValidInput_whenCallCreateEmail_thenReturnCreatedResponse() throws Exception {
+
+//        Email email = Email.builder().id(1l).body("Test body").build();
+//        when(memoryEmailDB.addEmail(email)).thenReturn(email);
+//        when(emailService.createEmail(any())).thenReturn(email);
+
+        mockMvc.perform(post("/v1/emails")
+                        .header("username", "abc@eroad.com")
+                        .content(getValidEmailDtoJsonString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(header().string("location-url", "/v1/emails/1"))
+                .andExpect(status().isCreated());
+    }
+
+    private String getInValidEmailDtoJsonString() throws ParseException, JsonProcessingException {
         EmailDto dto = new EmailDto();
         dto.setBody("");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(dto );
+        objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
+        return ow.writeValueAsString(dto);
+    }
+
+    private String getValidEmailDtoJsonString() throws ParseException, JsonProcessingException {
+        EmailDto dto = new EmailDto();
+        dto.setBody("Test subject");
+        objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
+        return ow.writeValueAsString(dto);
     }
 
 }

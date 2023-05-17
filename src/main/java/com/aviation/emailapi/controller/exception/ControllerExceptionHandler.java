@@ -1,4 +1,4 @@
-package com.aviation.emailapi.controller;
+package com.aviation.emailapi.controller.exception;
 
 import com.aviation.emailapi.model.response.ValidationError;
 import com.aviation.emailapi.model.response.Violation;
