@@ -35,4 +35,14 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setErrorMsg(exception.getErrorMsg());
         return errorResponse;
     }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ResponseBody
+    ErrorResponse onCommonException(Exception exception) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.SERVICE_UNAVAILABLE.value());
+        errorResponse.setErrorMsg(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase());
+        return errorResponse;
+    }
 }
