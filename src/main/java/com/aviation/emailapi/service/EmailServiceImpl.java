@@ -5,6 +5,8 @@ import com.aviation.emailapi.repo.MemoryEmailDB;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class EmailServiceImpl implements EmailService {
@@ -12,6 +14,11 @@ public class EmailServiceImpl implements EmailService {
 
     public Email createEmail(Email email) {
          return memoryEmailDB.addEmail(email);
+    }
+
+    public Optional<Email> getEmailById(Long id) {
+        return memoryEmailDB.getEmailById(id);
+
     }
 
 }

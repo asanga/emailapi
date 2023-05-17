@@ -1,6 +1,5 @@
 package com.aviation.emailapi.configuration;
 
-import com.aviation.emailapi.repo.MemoryEmailDB;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -21,11 +20,6 @@ public class BeanInitializer {
     @Bean
     public ModelMapper getModelMapper() {
         return new ModelMapper();
-    }
-
-    @Bean
-    public MemoryEmailDB getMemoryEmailDB() {
-        return new MemoryEmailDB();
     }
 
     @Bean
