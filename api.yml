@@ -20,6 +20,7 @@ paths:
         - $ref: '#/components/parameters/UsernameParam'
         - $ref: '#/components/parameters/PageNumberParam'
         - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: '#/components/parameters/EmailStatusParam'
       responses:
         '200':
           description: "OK"
@@ -192,6 +193,13 @@ components:
       in: query
       schema:
         type: integer
+    EmailStatusParam:
+      name: status
+      required: true
+      description: Specify email list status
+      in: query
+      schema:
+        type: string
   schemas:
     EmailListDto:
       type: array
@@ -219,6 +227,15 @@ components:
         body:
           type: string
           description: Body of the email
+        status:
+          type: enum
+          description: Status of email
+          $ref: '#/components/schemas/EmailStatusEnum'
     EmailAddressDto:
       type: string
       description: email
+    EmailStatusEnum:
+      type: string
+      enum:
+        - DRAFT
+        - SENT

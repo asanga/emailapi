@@ -1,6 +1,7 @@
 package com.aviation.emailapi.repo;
 
 import com.aviation.emailapi.model.Email;
+import com.aviation.emailapi.model.EmailStatusEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,6 +22,18 @@ public class MemoryEmailDB {
 
     public Optional<Email> getEmailById(Long id) {
         return Optional.ofNullable(emailList.stream().filter(e -> e.getId() == id).findFirst().orElse(null));
+    }
+
+    public Optional<List<Email>> getEmailList(Integer pageNumber, Integer pageSize, EmailStatusEnum status) {
+
+        int startingId = pageNumber * pageSize;
+        long existingListLength = emailList.stream().filter(e -> e.getStatus() == status).count();
+        if (startingId > existingListLength) {
+            return Optional.empty();
+        }
+
+        List<Email> emails = emailList.stream().skip(startingId).limit(pageSize).toList();
+        return  Optional.ofNullable(emails);
     }
 
 }

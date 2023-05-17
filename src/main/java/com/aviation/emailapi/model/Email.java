@@ -19,4 +19,6 @@ public class Email {
 
     @NotBlank(message = "body cannot be null or blank")
     private String body;
+
+    private EmailStatusEnum status;
 }
