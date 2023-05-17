@@ -52,6 +52,20 @@
 			<artifactId>swagger-annotations</artifactId>
 			<version>2.2.8</version>
 		</dependency>
+
+		<!-- validation -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+
+		<!-- model mapper -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.4.4</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -82,8 +96,8 @@
 								${basedir}/api.yml
 							</inputSpec>
 							<generatorName>spring</generatorName>
-							<apiPackage>${project.groupId}.email-demo.api</apiPackage>
-							<modelPackage>${project.groupId}.email-demo.model</modelPackage>
+							<apiPackage>${project.groupId}.emailapi.api</apiPackage>
+							<modelPackage>${project.groupId}.emailapi.model</modelPackage>
 							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
 							<configOptions>
 								<openApiNullable>false</openApiNullable>
