@@ -2,10 +2,12 @@ package com.aviation.emailapi.util;
 
 import com.aviation.emailapi.model.Email;
 import com.aviation.emailapi.model.EmailDto;
-import jakarta.validation.*;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 

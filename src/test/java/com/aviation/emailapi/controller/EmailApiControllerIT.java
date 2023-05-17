@@ -1,6 +1,5 @@
 package com.aviation.emailapi.controller;
 
-import com.aviation.emailapi.model.Email;
 import com.aviation.emailapi.model.EmailDto;
 import com.aviation.emailapi.repo.MemoryEmailDB;
 import com.aviation.emailapi.service.EmailService;
@@ -20,8 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.ParseException;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -65,10 +62,6 @@ class EmailApiControllerIT {
 
     @Test
     public void givenValidInput_whenCallCreateEmail_thenReturnCreatedResponse() throws Exception {
-
-//        Email email = Email.builder().id(1l).body("Test body").build();
-//        when(memoryEmailDB.addEmail(email)).thenReturn(email);
-//        when(emailService.createEmail(any())).thenReturn(email);
 
         mockMvc.perform(post("/v1/emails")
                         .header("username", "abc@eroad.com")
